@@ -1,0 +1,1 @@
+yarn --cwd react-example/ start & yarn --cwd vue-example/ dev & yarn --cwd svelte-example dev
