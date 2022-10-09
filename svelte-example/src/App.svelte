@@ -29,7 +29,8 @@
 
 		currentUser = currentUser == users[0] ? users[1] : users[0];
 		symbol = currentUser == users[0] ? "X" : "O";
-		// One annoyting aspect of svlete, need to use spread operated to left-hand assign arrays
+
+		// One annoyting aspect of svlete, need to use spread operated to left-hand assign arrays to force an update
 		users = [...users];	
 	})
 

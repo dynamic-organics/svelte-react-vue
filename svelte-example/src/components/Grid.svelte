@@ -1,6 +1,6 @@
 <script>
+// We'll be emitting an event on square selection; need to import the function to create our dispatch method
 import { createEventDispatcher } from 'svelte';
-
 const dispatch = createEventDispatcher();
 
 const squares = [
@@ -22,6 +22,8 @@ const registerSelection = ((i) => {
         checked: true,
         symbol: symbol
     }
+
+    // Dispatch the function to the parent components, parent component can choose if they want to listen or not
     dispatch("selectionMade", { 
         squares: squares,
         selectedSquare: i
@@ -29,6 +31,7 @@ const registerSelection = ((i) => {
 })
 </script>
 
+<!-- This is the HTML template, complelete with dynamic data population using #each-->
 <div class="grid">
     {#each squares as square, i}
         <div on:click={() => registerSelection(i)} data-index={i}>
@@ -38,6 +41,11 @@ const registerSelection = ((i) => {
 </div>
 
 <style lang='scss'>
+    /*
+        - Stylig in this area is component-scoped, so componenet-scoped naming (e.g. BEM) is unnecessary
+        - Svelte will automatically provide a namespaced scoped to this component
+        - Styles in this area will not bleed into other areas except in certain cases for children or if using the :global() function
+    */
     .grid {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
