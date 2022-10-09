@@ -4,9 +4,12 @@ import './app.scss';
 import Grid from './components/Grid';
 import PlayerName from './components/PlayerName';
 import UserCount from './components/UserCount';
+import { useState } from 'react';
 
-// This was pulled over from svelte, however this will not be stateful
-let users = [
+function App() {
+
+// To make something stateful, we need to use the `useState` hook, or make the wrapping object a class
+let [users, setUsers] = useState([
   {
     name: "Domo Arigato",
     squares: []
@@ -15,30 +18,35 @@ let users = [
     name: "Mr. Roboto",
     squares: []
   }
-]
+])
 
-let currentUser = users[0];
-let symbol = "X";
-let gameOver = false;
+// Need to do the same thing for every stateful value
+let [currentUser, setCurrentUser] = useState(users[0]);
+let [gameOver, setGameOver] = useState(false);
+let [symbol, setSymbol] = useState("X");
 
 // For any component where you need to lift the state, the parent component needs to 
 // create and inject the function into the component props
 // Similarly, the component must be aware of the injected function
 const updateSelection = ((squareIndex) => {
-  console.log(squareIndex);
-  symbol = "X" ? "O" : "X";
+  
+  console.log(squareIndex);  
+  setSymbol(symbol == "X" ? "O" : "X"); 
+  
   currentUser.squares.push(squareIndex);
   if (calculateWinnner(currentUser)) {
-    gameOver = true;
+    setGameOver(true);
     return;
   }
-  console.log(currentUser);
-  currentUser = currentUser == users[0] ? users[1] : users[0];
+  setCurrentUser(currentUser == users[0] ? users[1] : users[0]);
   console.log(currentUser);
 })
 
 const updatePlayerName = ((i, name) => {
   users[i].name = name;
+  // Like svelte, need to use spread operator to assure React that the value has changed 
+  // (well, probably actually changing memory pointer or somethig, but whatever)
+  setUsers([...users]); 
   console.log(users);
 })
 
@@ -72,8 +80,8 @@ const checkCombo = ((arr, user) => {
   let one = false, two = false, three = false; 
 
   for (let square of user.squares) {
-    console.log(`Checking ${square}`);
-    console.log(arr[0]);
+    // console.log(`Checking ${square}`);
+    // console.log(arr[0]);
     if (square === arr[0]) {
       
       console.log("Matches one");
@@ -92,7 +100,6 @@ const checkCombo = ((arr, user) => {
   return one && two && three;
 })
 
-function App() {
   return (
     <div className="App">
       <header className="App-header">
@@ -121,7 +128,8 @@ function App() {
           // Had to convert the index to string because... *shrug*
           <UserCount key={`${i}`} user={users[i].name} currentCount={users[i].squares.length } />
         )
-      })}      
+      })} 
+      {gameOver ? <h2 className="game-over">GAME OVER! {currentUser.name} WINS!</h2> : ""}     
     </div>
   );
 }

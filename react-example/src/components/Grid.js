@@ -1,6 +1,9 @@
+import { useState } from 'react';
+
 export default function Grid (props) {
     
-    let squares = [
+    // Like the higher-level app, needed to convert to useState in order to actually update grid visually
+    let [squares, setSquares] = useState([
         {}, 
         {}, 
         {}, 
@@ -10,7 +13,7 @@ export default function Grid (props) {
         {}, 
         {}, 
         {}, 
-    ];
+    ]);
 
     let symbol = props.symbol || "X";
 
@@ -20,11 +23,13 @@ export default function Grid (props) {
             checked: true,
             symbol: symbol
         }
+        setSquares([...squares]);
 
+        // Here we don't dispatch the function, but instead call the function provided to use from the parent component
         props.updateSelection(i);
-    
-        // Dispatch the function to the parent components
-        console.log(symbol);
+        // Personal note: the issue I have with this pattern is that, 
+        // in some cases, not all components need to expose the same data to all parents; 
+        // in those instances the component would fail or the parent would need to instantiate a dummy function
     })
     
     // The template / markeup is contained within a `return` function; 
