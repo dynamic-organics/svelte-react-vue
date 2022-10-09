@@ -3,59 +3,12 @@ import HelloWorld from './components/HelloWorld.vue'
 import Grid from './components/Grid.vue'
 import PlayerName from './components/PlayerName.vue'
 import UserCount from './components/UserCount.vue'
+import { calculateWinner } from './utils.js';
 
 </script>
 
 <script lang="ts">
-  const calculateWinnner = ((user) => {
-		let winners = [
-			[0,1,2],
-			[3,4,5],
-			[6,7,8],
-			[0,3,6],
-			[1,4,7],
-			[2,5,8],
-			[0,4,8],
-			[6,4,2]
-		]
-		// Horizontal
-		let win = false;
-
-		for (let combo of winners) {
-			let win = checkCombo(combo, user);
-			if (win) { 
-				console.log("We got a winner!");
-				console.log(user);
-				return win;
-			}
-		}
-		
-		return false;
-	})
-
-	const checkCombo = ((arr, user) => {
-		let one = false, two = false, three = false; 
-
-		for (let square of user.squares) {
-			console.log(`Checking ${square}`);
-			console.log(arr[0]);
-			if (square === arr[0]) {
-				
-				console.log("Matches one");
-				one = true;
-			}
-			if (square === arr[1]) {
-				console.log("Matches two");
-				two = true;
-			}
-			if (square === arr[2]) {
-				console.log("Matches three");
-				three = true;
-			}
-		}
-
-		return one && two && three;
-	})
+  
 
   export default {
     data() {
@@ -81,7 +34,7 @@ import UserCount from './components/UserCount.vue'
       }, 
       selectionMade (i) {
         this.currentUser.squares.push(i);
-        if(calculateWinnner(this.currentUser)) {
+        if(calculateWinner(this.currentUser)) {
           this.gameOver = true;
           return;
         }

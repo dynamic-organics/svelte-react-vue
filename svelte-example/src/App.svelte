@@ -2,6 +2,8 @@
 	import Grid from "./components/Grid.svelte";
     import PlayerName from "./components/PlayerName.svelte";
     import UserCount from "./components/UserCount.svelte";
+	import { calculateWinner } from './utils.js';
+	
 	export let name: string;
 
 	let users = [
@@ -20,73 +22,19 @@
 	let gameOver = false;
 
 	const updateSelection = ((e) => {
-		console.log(currentUser);
+		
 		currentUser.squares.push(e.detail.selectedSquare);
-		if(calculateWinnner(currentUser)) {
+		if(calculateWinner(currentUser)) {
 			gameOver = true;
 			return;
 		}
 
 		currentUser = currentUser == users[0] ? users[1] : users[0];
 		symbol = currentUser == users[0] ? "X" : "O";
-
-		// One annoyting aspect of svlete, need to use spread operated to left-hand assign arrays to force an update
 		users = [...users];	
 	})
 
-	const calculateWinnner = ((user) => {
-		let winners = [
-			[0,1,2],
-			[3,4,5],
-			[6,7,8],
-			[0,3,6],
-			[1,4,7],
-			[2,5,8],
-			[0,4,8],
-			[6,4,2]
-		]
-		// Horizontal
-		let win = false;
-
-		for (let combo of winners) {
-			let win = checkCombo(combo, user);
-			if (win) { 
-				console.log("We got a winner!");
-				console.log(user);
-				return win;
-			}
-		}
-		
-		return false;
-	})
-
-	const checkCombo = ((arr, user) => {
-		let one = false, two = false, three = false; 
-
-		for (let square of user.squares) {
-			console.log(`Checking ${square}`);
-			console.log(arr[0]);
-			if (square === arr[0]) {
-				
-				console.log("Matches one");
-				one = true;
-			}
-			if (square === arr[1]) {
-				console.log("Matches two");
-				two = true;
-			}
-			if (square === arr[2]) {
-				console.log("Matches three");
-				three = true;
-			}
-		}
-
-		return one && two && three;
-	})
-
 	const updatePlayerName = ((e, i) => {
-		console.log(e.detail);
-		console.log(i);
 		users[i].name = e.detail.name;
 		users = [...users];
 	})

@@ -18,8 +18,7 @@ export default function Grid (props) {
     let symbol = props.symbol || "X";
 
     const registerSelection = ((i) => {
-        console.log(`Square was clicked: ${i}`);
-        squares[i] = { 
+                squares[i] = { 
             checked: true,
             symbol: symbol
         }

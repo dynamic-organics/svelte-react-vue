@@ -5,9 +5,7 @@
         },
         emits: ['nameUpdated'],
         methods: {
-            // Very much dislike that this entire framework still relies on the utterly confusing "this" context
             updateName(e) {
-                console.log("Updating name");
                 this.$emit('nameUpdated', e.target.value);
             }
         }
